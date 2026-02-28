@@ -30,7 +30,7 @@ def predict_api():
     img = preprocess_image(file.read())
     label, confidence = predict(img)
 
-    THRESHOLD = 0.85
+    THRESHOLD = 0.5
 
     if confidence < THRESHOLD:
         label = "Unknown"
