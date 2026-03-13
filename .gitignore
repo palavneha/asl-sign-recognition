@@ -1,0 +1,23 @@
+# =====================
+# Large ML files
+# =====================
+datasets/
+models/
+notebooks/models/
+
+*.npy
+*.keras
+*.h5
+
+# =====================
+# Jupyter Notebook junk
+# =====================
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+Untitled.ipynb
+
+# =====================
+# Python cache
+# =====================
+__pycache__/
+*.pyc
