@@ -278,16 +278,6 @@
             word-break: break-all;
         }
 
-        .tts-btn {
-            background: var(--secondary-beige) !important;
-            color: white !important;
-            border-color: var(--secondary-beige) !important;
-        }
-
-        .tts-btn:hover {
-            background: #806541 !important;
-        }
-
         /* Dictionary */
         .dictionary-section {
             padding: 80px 0;
@@ -513,32 +503,28 @@
                 </div>
             </div>
 
-            <!-- Right Column: Word Builder & TTS -->
+            <!-- Right Column: Word Builder -->
             <div class="col-md-6" id="word-builder">
                 <div class="clean-card secondary">
                     <h2>Word Builder</h2>
-                    <p class="card-desc">String your detected letters together to form complete sentences and save your
-                        messages.</p>
+                    <p class="card-desc">String your detected letters together, then translate or speak the result.</p>
 
                     <div class="word-display" id="wordDisplay">...</div>
 
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="autoAppendToggle" checked>
-                        <label class="form-check-label text-muted" for="autoAppendToggle">
-                            Auto-append high-confidence predictions (&gt;70%)
-                        </label>
+                        <label class="form-check-label text-muted" for="autoAppendToggle">Auto-append high-confidence
+                            (&gt;70%)</label>
                     </div>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="autoSpaceToggle">
-                        <label class="form-check-label text-muted" for="autoSpaceToggle">
-                            Auto-add space after 3 seconds pause
-                        </label>
+                        <label class="form-check-label text-muted" for="autoSpaceToggle">Auto-add space after 3s
+                            pause</label>
                     </div>
                     <div class="form-check mb-4">
                         <input class="form-check-input" type="checkbox" id="autocorrectToggle">
-                        <label class="form-check-label text-muted" for="autocorrectToggle">
-                            Autocorrect word after pause
-                        </label>
+                        <label class="form-check-label text-muted" for="autocorrectToggle">Autocorrect word after
+                            pause</label>
                     </div>
 
                     <div class="d-flex flex-wrap gap-2 mb-4">
@@ -549,63 +535,114 @@
                         <button class="btn-custom-outline flex-grow-1" onclick="clearWord()"
                             style="border-color:#e74c3c; color:#e74c3c;">Clear Sequence</button>
                     </div>
-                    <select id="languageSelect" class="btn-custom-outline w-100 mb-2"
-                        style="border-radius: 50px; padding: 10px 20px;">
-                        <option value="en-US">English</option>
-                        <option value="es-ES">Spanish</option>
-                        <option value="fr-FR">French</option>
-                        <option value="de-DE">German</option>
-                        <option value="hi-IN">Hindi</option>
-                        <option value="ja-JP">Japanese</option>
-                        <option value="zh-CN">Chinese</option>
-                        <option value="ar-SA">Arabic</option>
-                    </select>
 
-                    <!-- TTS Button -->
-                    <hr class="my-3 mx-4" style="border-color: var(--card-gray)">
-                    <button class="btn-custom-primary tts-btn w-100" onclick="speakWord()">🔊 Speak Word</button>
-                </div>
-            </div> <!-- End Container -->
-
-            <!-- Dictionary Section -->
-            <section class="dictionary-section" id="dictionary">
-                <div class="container text-center">
-                    <h2>Visual ASL Dictionary</h2>
-                    <p class="dict-desc mb-5 col-md-8 mx-auto">Fingerspelling is an essential part of American Sign
-                        Language.
-                        Select a letter below to see a real demonstration.</p>
-
-                    <div class="dict-grid" id="dictGrid">
-                        <!-- Populated by JS -->
+                    <!-- Translation -->
+                    <hr style="border-color: rgba(0,0,0,0.08); margin-bottom: 20px;">
+                    <h5
+                        style="font-family:'Outfit',sans-serif; font-size:0.9rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:12px;">
+                        Translation</h5>
+                    <div class="d-flex gap-2 mb-3">
+                        <select id="targetLang" class="form-select"
+                            style="border-radius:50px; font-family:'Outfit',sans-serif; font-size:0.9rem;">
+                            <optgroup label="Indian Regional Languages">
+                                <option value="mr">Marathi (मराठी)</option>
+                                <option value="bn">Bengali (বাংলা)</option>
+                                <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
+                                <option value="te">Telugu (తెలుగు)</option>
+                                <option value="ta">Tamil (தமிழ்)</option>
+                                <option value="gu">Gujarati (ગુજરાતી)</option>
+                                <option value="kn">Kannada (ಕನ್ನಡ)</option>
+                                <option value="ml">Malayalam (മലയാളം)</option>
+                                <option value="hi">Hindi (हिन्दी)</option>
+                            </optgroup>
+                            <optgroup label="International Languages">
+                                <option value="fr">French</option>
+                                <option value="es">Spanish</option>
+                                <option value="de">German</option>
+                                <option value="ja">Japanese</option>
+                                <option value="zh">Chinese (Simplified)</option>
+                                <option value="ar">Arabic</option>
+                                <option value="pt">Portuguese</option>
+                                <option value="ru">Russian</option>
+                                <option value="it">Italian</option>
+                                <option value="ko">Korean</option>
+                            </optgroup>
+                        </select>
+                        <button class="btn-custom-primary" onclick="translateWord()"
+                            style="white-space:nowrap;">Translate →</button>
+                    </div>
+                    <div id="translationResult"
+                        style="display:none; background:var(--bg-color); border-radius:16px; padding:16px 20px; margin-bottom:16px;">
+                        <span
+                            style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:#888; display:block; margin-bottom:4px;">Translated</span>
+                        <div class="d-flex justify-content-between align-items-center gap-2">
+                            <strong id="translatedText"
+                                style="font-size:1.2rem; color:var(--secondary-beige); word-break:break-word;"></strong>
+                            <button class="btn-custom-outline" onclick="speakText('translated')"
+                                style="white-space:nowrap; padding:6px 14px; font-size:0.85rem;">🔊 Speak</button>
+                        </div>
                     </div>
 
-                    <div class="dict-view shadow-sm">
-                        <!-- Using public images from lifeprint.com -->
-                        <img id="dictImage" src="https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/a.gif"
-                            alt="ASL Sign A" onerror="fallbackImage(this)">
-                        <p class="sign-label" id="dictLabel">Sign: A</p>
-                        <p class="mt-2 mb-0" style="font-size: 0.85rem; color: #888;">Source: LifePrint.com</p>
+                    <!-- TTS -->
+                    <hr style="border-color: rgba(0,0,0,0.08); margin-bottom: 20px;">
+                    <h5
+                        style="font-family:'Outfit',sans-serif; font-size:0.9rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:#888; margin-bottom:12px;">
+                        Text to Speech</h5>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button class="btn-custom-primary flex-grow-1" onclick="speakText('original')">▶ Speak
+                            Sentence</button>
+                        <button class="btn-custom-outline flex-grow-1" onclick="stopSpeaking()">■ Stop</button>
                     </div>
-                </div>
-            </section>
+                    <div class="d-flex align-items-center gap-3">
+                        <span style="font-size:0.85rem; color:#888; white-space:nowrap;">Speed</span>
+                        <input type="range" id="ttsSpeed" min="0.5" max="2" step="0.1" value="1" class="form-range"
+                            oninput="document.getElementById('ttsSpeedVal').innerText = parseFloat(this.value).toFixed(1) + '×'">
+                        <span id="ttsSpeedVal"
+                            style="font-size:0.85rem; color:var(--secondary-beige); min-width:32px;">1.0×</span>
+                    </div>
+                </div> <!-- End Word Builder card -->
+            </div> <!-- End col-md-6 Word Builder -->
+        </div> <!-- End Application Grid row -->
+    </div> <!-- End Main Content Container -->
 
-            <!-- Simple Footer -->
-            <footer>
-                <div class="container">
-                    <h4 style="font-family: 'Playfair Display', serif; color: var(--accent-green);">Vocalize
-                    </h4>
-                    <p class="mt-2">Built for learning and translation.</p>
-                </div>
-            </footer>
+    <!-- Dictionary Section -->
+    <section class="dictionary-section" id="dictionary">
+        <div class="container text-center">
+            <h2>Visual ASL Dictionary</h2>
+            <p class="dict-desc mb-5 col-md-8 mx-auto">Fingerspelling is an essential part of American Sign
+                Language.
+                Select a letter below to see a real demonstration.</p>
 
-            <!-- Bootstrap 5 JS Bundle -->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.css"
-                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-                crossorigin="anonymous"></script>
+            <div class="dict-grid" id="dictGrid">
+                <!-- Populated by JS -->
+            </div>
 
-            <!-- Application Script -->
-            <script src="./elegant-carousel.js"></script>
-            <script>
+            <div class="dict-view shadow-sm">
+                <!-- Using public images from lifeprint.com -->
+                <img id="dictImage" src="https://www.lifeprint.com/asl101/fingerspelling/abc-gifs/a.gif"
+                    alt="ASL Sign A" onerror="fallbackImage(this)">
+                <p class="sign-label" id="dictLabel">Sign: A</p>
+                <p class="mt-2 mb-0" style="font-size: 0.85rem; color: #888;">Source: LifePrint.com</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simple Footer -->
+    <footer>
+        <div class="container">
+            <h4 style="font-family: 'Playfair Display', serif; color: var(--accent-green);">Vocalize</h4>
+            <p class="mt-2">Built for learning and translation.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <!-- Application Script -->
+    <script src="./elegant-carousel.js"></script>
+    <script>
                 let currentWord = "";
                 let lastPrediction = "";
                 let autoCorrectTimer = null;
@@ -626,7 +663,6 @@
 
                 function updateWordDisplay() {
                     const display = document.getElementById("wordDisplay");
-                    // Replace trailing spaces so HTML renders them visibly
                     let textToShow = currentWord || "...";
                     if (currentWord && currentWord.endsWith(" ")) {
                         textToShow = currentWord.replace(/ $/g, "&nbsp;");
@@ -657,60 +693,41 @@
                                 }
                             }, 5000);
                         }
-                        // if neither checked, do nothing — manual mode
                     } else {
                         alert("Translate a sign first to append it.");
                     }
                 }
 
                 async function autocorrectAndAddSpace() {
-                    const match = currentWord.match(/([a-zA-Z]+)\s*$/);
-                    if (!match || match[1].length < 3) {
-                        if (!currentWord.endsWith(" ")) {
-                            currentWord += " ";
-                            updateWordDisplay();
-                        }
+                    const text = currentWord.trim();
+                    if (!text || text.length < 2) {
+                        if (!currentWord.endsWith(" ")) currentWord += " ";
+                        updateWordDisplay();
                         return;
                     }
 
-                    const lastWord = match[1].toLowerCase();
+                    const display = document.getElementById("wordDisplay");
+                    display.style.opacity = "0.5";
 
-                    const candidates = [];
-                    for (let i = 0; i < lastWord.length; i++) {
-                        candidates.push(lastWord.slice(0, i) + lastWord.slice(i + 1));
-                    }
-                    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-                    for (let i = 0; i < lastWord.length; i++) {
-                        for (const letter of alphabet) {
-                            if (letter !== lastWord[i]) {
-                                candidates.push(lastWord.slice(0, i) + letter + lastWord.slice(i + 1));
-                            }
+                    try {
+                        const res = await fetch("http://localhost:5000/autocorrect", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ text })
+                        });
+                        const data = await res.json();
+                        if (data.corrected && data.corrected !== text.toUpperCase()) {
+                            currentWord = data.corrected;
+                        } else {
+                            if (!currentWord.endsWith(" ")) currentWord += " ";
                         }
-                    }
-
-                    let corrected = null;
-                    for (const candidate of candidates) {
-                        try {
-                            const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${candidate}`);
-                            if (res.ok) {
-                                corrected = candidate.toUpperCase();
-                                break;
-                            }
-                        } catch (e) { }
-                    }
-
-                    if (corrected) {
-                        const wordStartIndex = currentWord.toLowerCase().lastIndexOf(lastWord);
-                        if (wordStartIndex !== -1) {
-                            currentWord = currentWord.substring(0, wordStartIndex) + corrected + " ";
-                        }
-                    } else {
+                    } catch (e) {
                         if (!currentWord.endsWith(" ")) currentWord += " ";
                     }
 
+                    display.style.opacity = "1";
                     updateWordDisplay();
                 }
-
                 function addSpace() {
                     if (autoCorrectTimer) clearTimeout(autoCorrectTimer);
                     if (!currentWord.endsWith(" ")) currentWord += " ";
@@ -726,31 +743,6 @@
                     currentWord = "";
                     lastPrediction = "";
                     updateWordDisplay();
-                }
-
-                // TEXT TO SPEECH FUNCTION
-                async function speakWord() {
-                    const voices = window.speechSynthesis.getVoices();
-                    const matchingVoice = voices.find(v => v.lang.startsWith(selectedLang.split("-")[0]));
-
-                    if (matchingVoice) {
-                        // Use browser TTS if voice available
-                        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                        utterance.voice = matchingVoice;
-                        utterance.lang = selectedLang;
-                        utterance.rate = 0.9;
-                        window.speechSynthesis.speak(utterance);
-                    } else {
-                        // Fallback: use MyMemory TTS audio directly
-                        const langCode = selectedLang.split("-")[0];
-                        const audio = new Audio(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToSpeak)}&langpair=en|${langCode}&of=audio`);
-                        audio.play().catch(() => {
-                            // Final fallback: just speak in English if all else fails
-                            const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                            utterance.lang = "en-US";
-                            window.speechSynthesis.speak(utterance);
-                        });
-                    }
                 }
 
                 let videoStream = null;
@@ -824,17 +816,12 @@
                         return;
                     }
 
-                    // Set canvas exact dimensions to video
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
 
-                    // Draw video frame to canvas
                     const ctx = canvas.getContext('2d');
-                    // Since we flipped the video preview with CSS (scaleX(-1)), we should draw it normally 
-                    // the AI model expects a normal right/left hand based on dataset.
                     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                    // Convert to blob and send
                     canvas.toBlob(blob => {
                         const file = new File([blob], "webcam_capture.jpg", { type: "image/jpeg" });
                         const formData = new FormData();
@@ -844,7 +831,6 @@
                 }
 
                 function sendPredictionRequest(formData) {
-
                     const resultBox = document.getElementById("resultBox");
                     const predText = document.getElementById("predictionText");
                     const confText = document.getElementById("confidenceText");
@@ -920,6 +906,102 @@
                     if (letter && !imgElement.src.includes("wikihow")) {
                         imgElement.src = `https://www.signingsavvy.com/images/words/signs/${letter.toLowerCase()}.jpg`;
                     }
+                }
+                // ── Language config ───────────────────────────────────────────
+                const langConfig = {
+                    // Indian Regional Languages
+                    mr: { locale: "mr-IN", gtts: "mr" },
+                    bn: { locale: "bn-IN", gtts: "bn" },
+                    pa: { locale: "pa-IN", gtts: "pa" },
+                    te: { locale: "te-IN", gtts: "te" },
+                    ta: { locale: "ta-IN", gtts: "ta" },
+                    gu: { locale: "gu-IN", gtts: "gu" },
+                    kn: { locale: "kn-IN", gtts: "kn" },
+                    ml: { locale: "ml-IN", gtts: "ml" },
+                    hi: { locale: "hi-IN", gtts: "hi" },
+                    // International Languages
+                    fr: { locale: "fr-FR", gtts: "fr" },
+                    es: { locale: "es-ES", gtts: "es" },
+                    de: { locale: "de-DE", gtts: "de" },
+                    ja: { locale: "ja-JP", gtts: "ja" },
+                    zh: { locale: "zh-CN", gtts: "zh-CN" },
+                    ar: { locale: "ar-SA", gtts: "ar" },
+                    pt: { locale: "pt-PT", gtts: "pt" },
+                    ru: { locale: "ru-RU", gtts: "ru" },
+                    it: { locale: "it-IT", gtts: "it" },
+                    ko: { locale: "ko-KR", gtts: "ko" }
+                };
+
+                // ── Translation (Google unofficial endpoint) ──────────────────
+                async function translateWord() {
+                    const text = currentWord.trim();
+                    if (!text) { alert("Build a sentence first."); return; }
+
+                    const lang = document.getElementById("targetLang").value;
+                    const resultBox = document.getElementById("translationResult");
+                    const resultText = document.getElementById("translatedText");
+
+                    resultText.innerText = "Translating…";
+                    resultBox.style.display = "block";
+
+                    try {
+                        const res = await fetch("http://localhost:5000/translate", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ text, lang })
+                        });
+                        const data = await res.json();
+                        if (data.error) throw new Error(data.error);
+                        resultText.innerText = data.translated;
+                    } catch (e) {
+                        console.error("Translation error:", e);
+                        resultText.innerText = "Translation failed.";
+                    }
+                }
+
+                let currentAudio = null;
+
+                async function speakText(source) {
+                    let text = "";
+                    let lang = "en";
+
+                    if (source === "original") {
+                        text = currentWord.trim();
+                        if (!text) { alert("Build a sentence first."); return; }
+                        lang = "en";
+                    } else {
+                        text = document.getElementById("translatedText")?.innerText?.trim();
+                        if (!text || text === "Translating…" || text === "Translation failed.") {
+                            alert("Translate something first."); return;
+                        }
+                        lang = document.getElementById("targetLang").value;
+                    }
+
+                    try {
+                        if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+
+                        const res = await fetch("http://localhost:5000/tts", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ text, lang })
+                        });
+
+                        if (!res.ok) throw new Error("TTS server error");
+
+                        const blob = await res.blob();
+                        const url = URL.createObjectURL(blob);
+                        currentAudio = new Audio(url);
+                        currentAudio.playbackRate = parseFloat(document.getElementById("ttsSpeed").value);
+                        currentAudio.play();
+                    } catch (e) {
+                        console.error("TTS error:", e);
+                        alert("TTS failed. Check console.");
+                    }
+                }
+
+                function stopSpeaking() {
+                    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+                    if (window.speechSynthesis) window.speechSynthesis.cancel();
                 }
             </script>
 </body>
