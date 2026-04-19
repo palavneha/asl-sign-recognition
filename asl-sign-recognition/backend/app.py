@@ -5,6 +5,9 @@ from predictor import predict
 from chatbot import get_bot_response
 import anthropic
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # loads variables from .env file
 
 app = Flask(__name__)
 CORS(app)
